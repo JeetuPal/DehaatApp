@@ -3,11 +3,13 @@ package com.dehaat.assignment.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import com.dehaat.assignment.R
 import com.dehaat.assignment.ui.BaseActivity
 import com.dehaat.assignment.ui.auth.AuthActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.progress_bar
 
 class MainActivity : BaseActivity() {
 
@@ -36,5 +38,13 @@ class MainActivity : BaseActivity() {
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun displayProgressBar(bool: Boolean) {
+        if (bool){
+            progress_bar.visibility = View.VISIBLE
+        } else {
+            progress_bar.visibility = View.GONE
+        }
     }
 }
