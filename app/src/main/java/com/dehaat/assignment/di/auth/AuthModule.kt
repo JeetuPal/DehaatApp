@@ -1,5 +1,6 @@
 package com.dehaat.assignment.di.auth
 
+import android.content.SharedPreferences
 import com.dehaat.assignment.api.auth.OpenApiAuthService
 import com.dehaat.assignment.persistence.AccountPropertiesDao
 import com.dehaat.assignment.persistence.AuthTokenDao
@@ -11,6 +12,18 @@ import retrofit2.Retrofit
 
 @Module
 class AuthModule{
+
+//    @Singleton
+//    @Provides
+//    fun provideSharedPreferences(application: Application): SharedPreferences {
+//        return application.getSharedPreferences(PreferenceKeys.APP_PREFERENCES, Context.MODE_PRIVATE)
+//    }
+//
+//    @Singleton
+//    @Provides
+//    fun provideSharedPrefsEditor(sharedPreferences: SharedPreferences): SharedPreferences.Editor {
+//        return sharedPreferences.edit()
+//    }
 
     @AuthScope
     @Provides
@@ -26,13 +39,17 @@ class AuthModule{
         sessionManager: SessionManager,
         authTokenDao: AuthTokenDao,
         accountPropertiesDao: AccountPropertiesDao,
-        openApiAuthService: OpenApiAuthService
+        openApiAuthService: OpenApiAuthService,
+        preferences: SharedPreferences,
+        editor: SharedPreferences.Editor
         ): AuthRepository {
         return AuthRepository(
             authTokenDao,
             accountPropertiesDao,
             openApiAuthService,
-            sessionManager
+            sessionManager,
+            preferences,
+            editor
         )
     }
 

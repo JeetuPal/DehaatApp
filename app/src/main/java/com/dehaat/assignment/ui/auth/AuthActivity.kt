@@ -12,8 +12,10 @@ import androidx.navigation.findNavController
 import com.dehaat.assignment.R
 import com.dehaat.assignment.ui.BaseActivity
 import com.dehaat.assignment.ui.ResponseType
+import com.dehaat.assignment.ui.auth.state.AuthStateEvent
 import com.dehaat.assignment.ui.main.MainActivity
 import com.dehaat.assignment.viewmodels.ViewModelProviderFactory
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_auth.*
 import javax.inject.Inject
 
@@ -39,6 +41,11 @@ class AuthActivity : BaseActivity(), NavController.OnDestinationChangedListener{
         findNavController(R.id.auth_nav_host_fragment).addOnDestinationChangedListener(this)
 
         subscribeObservers()
+        checkPreviousAuthUser()
+    }
+
+    private fun checkPreviousAuthUser() {
+        viewModel.setStateEvent(AuthStateEvent.CheckPreviousAuthEvent())
     }
 
     private fun subscribeObservers(){
@@ -87,6 +94,10 @@ class AuthActivity : BaseActivity(), NavController.OnDestinationChangedListener{
         } else {
             progress_bar.visibility = View.GONE
         }
+    }
+
+    override fun expandAppbar() {
+        findViewById<AppBarLayout>(R.id.app_bar).setExpanded(true)
     }
 }
 

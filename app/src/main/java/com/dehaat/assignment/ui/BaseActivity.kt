@@ -19,7 +19,6 @@ abstract class BaseActivity : DaggerAppCompatActivity(), DataStateChangeListener
     override fun onDataStateChange(dataState: DataState<*>?) {
         dataState?.let {
             GlobalScope.launch(Main) {
-
                 displayProgressBar(it.loading.isLoading)
 
                 it.error?.let { errorEvent ->

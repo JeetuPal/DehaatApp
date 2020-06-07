@@ -4,6 +4,10 @@ import com.dehaat.assignment.di.auth.AuthFragmentBuildersModule
 import com.dehaat.assignment.di.auth.AuthModule
 import com.dehaat.assignment.di.auth.AuthScope
 import com.dehaat.assignment.di.auth.AuthViewModelModule
+import com.dehaat.assignment.di.main.MainFragmentBuildersModule
+import com.dehaat.assignment.di.main.MainModule
+import com.dehaat.assignment.di.main.MainScope
+import com.dehaat.assignment.di.main.MainViewModelModule
 import com.dehaat.assignment.ui.auth.AuthActivity
 import com.dehaat.assignment.ui.main.MainActivity
 import dagger.Module
@@ -18,6 +22,9 @@ abstract class ActivityBuildersModule {
     )
     abstract fun contributeAuthActivity(): AuthActivity
 
-    @ContributesAndroidInjector
+    @MainScope
+    @ContributesAndroidInjector(
+        modules = [MainModule::class, MainFragmentBuildersModule::class, MainViewModelModule::class]
+    )
     abstract fun contributeMainActivity(): MainActivity
 }
