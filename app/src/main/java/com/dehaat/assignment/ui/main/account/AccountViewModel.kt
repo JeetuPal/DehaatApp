@@ -1,6 +1,7 @@
 package com.dehaat.assignment.ui.main.account
 
 import androidx.lifecycle.LiveData
+import com.dehaat.assignment.models.AccountProperties
 import com.dehaat.assignment.repository.account.AccountRepository
 import com.dehaat.assignment.session.SessionManager
 import com.dehaat.assignment.ui.BaseViewModel
@@ -19,7 +20,9 @@ constructor(
     override fun handleStateEvent(stateEvent: AccountStateEvent): LiveData<DataState<AccountViewState>> {
         when (stateEvent) {
             is AccountStateEvent.GetAccountPropertiesEvent -> {
-                return AbsentLiveData.create()
+                return sessionManager.cachedToken.value?.let { authToken ->
+                    accountRepository.getAccountProperties(authToken)
+                }?: AbsentLiveData.create()
             }
             is AccountStateEvent.UpdateAccountPropertiesEvent -> {
                 return AbsentLiveData.create()
@@ -31,6 +34,15 @@ constructor(
                 return AbsentLiveData.create()
             }
         }
+    }
+
+    fun setAccountPropertiesData(accountProperties: AccountProperties){
+        val update = getCurrentViewStateOrNew()
+        if(update.accountProperties == accountProperties){
+            return
+        }
+        update.accountProperties = accountProperties
+        _viewState.value = update
     }
 
     override fun initNewViewState(): AccountViewState {

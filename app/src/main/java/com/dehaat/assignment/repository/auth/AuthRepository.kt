@@ -50,7 +50,8 @@ constructor(
 
         return object : NetworkBoundResource<LoginResponse, Void, AuthViewState>(
             sessionManager.isConnectedToTheInternet(),
-            true
+            true,
+            false
         ) {
             override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<LoginResponse>) {
                 Log.d(TAG, "handleApiSuccessResponse: ${response}")
@@ -103,8 +104,16 @@ constructor(
                 repositoryJob?.cancel()   // cancel the previous job if not null and assign a new job.
                 repositoryJob = job
             }
+            // Ignore
+            override fun loadFromCache(): LiveData<AuthViewState> {
+                return AbsentLiveData.create()
+            }
 
             override suspend fun createCacheRequestAndReturn() {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun updateLocalDb(cacheObject: Void?) {
                 TODO("Not yet implemented")
             }
 
@@ -125,7 +134,9 @@ constructor(
         }
 
         return object : NetworkBoundResource<RegistrationResponse, Void, AuthViewState>(
-            sessionManager.isConnectedToTheInternet(), true
+            sessionManager.isConnectedToTheInternet(),
+            true,
+            false
         ){
             override suspend fun handleApiSuccessResponse(response: ApiSuccessResponse<RegistrationResponse>) {
                 Log.d(TAG, "handleApiSuccessResponse: ${response}")
@@ -187,6 +198,14 @@ constructor(
                 TODO("Not yet implemented")
             }
 
+            override fun loadFromCache(): LiveData<AuthViewState> {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun updateLocalDb(cacheObject: Void?) {
+                TODO("Not yet implemented")
+            }
+
         }.asLiveData()
     }
 
@@ -201,6 +220,7 @@ constructor(
         else{
             return object: NetworkBoundResource<Void, AccountProperties, AuthViewState>(
                 sessionManager.isConnectedToTheInternet(),
+                false,
                 false
             ){
                 override suspend fun createCacheRequestAndReturn() {
@@ -247,6 +267,14 @@ constructor(
                 override fun setJob(job: Job) {
                     repositoryJob?.cancel()
                     repositoryJob = job
+                }
+
+                override fun loadFromCache(): LiveData<AuthViewState> {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun updateLocalDb(cacheObject: AccountProperties?) {
+                    TODO("Not yet implemented")
                 }
 
 
