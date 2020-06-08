@@ -12,9 +12,12 @@ import com.dehaat.assignment.R
 import com.dehaat.assignment.di.main.account.ChangePasswordFragment
 import com.dehaat.assignment.ui.BaseActivity
 import com.dehaat.assignment.ui.auth.AuthActivity
+import com.dehaat.assignment.ui.main.account.BaseAccountFragment
 import com.dehaat.assignment.ui.main.account.UpdateAccountFragment
+import com.dehaat.assignment.ui.main.blog.BaseBlogFragment
 import com.dehaat.assignment.ui.main.blog.UpdateBlogFragment
 import com.dehaat.assignment.ui.main.blog.ViewBlogFragment
+import com.dehaat.assignment.ui.main.create_blog.BaseCreateBlogFragment
 import com.dehaat.assignment.util.BottomNavController
 import com.dehaat.assignment.util.BottomNavController.*
 import com.dehaat.assignment.util.setUpNavigation
@@ -76,6 +79,28 @@ class MainActivity : BaseActivity() ,
 
     override fun onGraphChange() {
         expandAppbar()
+        cancelActiveJobs()
+    }
+
+    private fun cancelActiveJobs(){
+        val fragments = bottomNavController.fragmentManager
+            .findFragmentById(bottomNavController.containerId)
+            ?.childFragmentManager
+            ?.fragments
+        if(fragments != null){
+            for(fragment in fragments){
+                if(fragment is BaseAccountFragment){
+                    fragment.cancelActiveJobs()
+                }
+                if(fragment is BaseBlogFragment){
+                    fragment.cancelActiveJobs()
+                }
+                if(fragment is BaseCreateBlogFragment){
+                    fragment.cancelActiveJobs()
+                }
+            }
+        }
+        displayProgressBar(false)
     }
 
     override fun onReselectNavItem(navController: NavController, fragment: Fragment) = when(fragment){

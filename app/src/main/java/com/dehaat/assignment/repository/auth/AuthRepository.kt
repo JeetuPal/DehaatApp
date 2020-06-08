@@ -11,6 +11,7 @@ import com.dehaat.assignment.models.AccountProperties
 import com.dehaat.assignment.models.AuthToken
 import com.dehaat.assignment.persistence.AccountPropertiesDao
 import com.dehaat.assignment.persistence.AuthTokenDao
+import com.dehaat.assignment.repository.JobManager
 import com.dehaat.assignment.repository.NetworkBoundResource
 import com.dehaat.assignment.session.SessionManager
 import com.dehaat.assignment.ui.DataState
@@ -37,7 +38,7 @@ constructor(
     val sessionManager: SessionManager,
     val sharedPreferences: SharedPreferences,
     val sharedPrefsEditor: SharedPreferences.Editor
-) {
+) : JobManager("AuthRepository") {
     private val TAG: String = "AppDebug"
     private var repositoryJob: Job? = null
 
@@ -101,8 +102,7 @@ constructor(
             }
 
             override fun setJob(job: Job) {
-                repositoryJob?.cancel()   // cancel the previous job if not null and assign a new job.
-                repositoryJob = job
+                addJob("attemptLogin", job)
             }
             // Ignore
             override fun loadFromCache(): LiveData<AuthViewState> {
@@ -190,8 +190,7 @@ constructor(
             }
 
             override fun setJob(job: Job) {
-                repositoryJob?.cancel()
-                repositoryJob = job
+                addJob("attemptRegistration", job)
             }
 
             override suspend fun createCacheRequestAndReturn() {
@@ -265,8 +264,7 @@ constructor(
                 }
 
                 override fun setJob(job: Job) {
-                    repositoryJob?.cancel()
-                    repositoryJob = job
+                    addJob("checkPreviousAuthUser", job)
                 }
 
                 override fun loadFromCache(): LiveData<AuthViewState> {
@@ -314,12 +312,6 @@ constructor(
                 )
             }
         }
-    }
-
-    // call this from inside VM.
-    fun cancelActiveJobs(){
-        Log.d(TAG, "AuthRepository: Cancelling on-going jobs...")
-        repositoryJob?.cancel()
     }
 
 }

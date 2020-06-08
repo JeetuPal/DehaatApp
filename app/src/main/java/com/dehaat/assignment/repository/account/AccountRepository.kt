@@ -7,6 +7,7 @@ import com.dehaat.assignment.api.main.OpenApiMainService
 import com.dehaat.assignment.models.AccountProperties
 import com.dehaat.assignment.models.AuthToken
 import com.dehaat.assignment.persistence.AccountPropertiesDao
+import com.dehaat.assignment.repository.JobManager
 import com.dehaat.assignment.repository.NetworkBoundResource
 import com.dehaat.assignment.session.SessionManager
 import com.dehaat.assignment.ui.DataState
@@ -23,12 +24,10 @@ class AccountRepository
 constructor(
   val openApiMainService: OpenApiMainService,
   val accountPropertiesDao: AccountPropertiesDao,
-  val sessionManager: SessionManager)
+  val sessionManager: SessionManager) : JobManager("AccountRepository")
 {
 
   private val TAG: String = "AppDebug"
-
-  private var repositoryJob: Job? = null
 
   fun getAccountProperties(authToken: AuthToken): LiveData<DataState<AccountViewState>> {
     return object: NetworkBoundResource<AccountProperties, AccountProperties, AccountViewState>(
@@ -91,16 +90,10 @@ constructor(
 
 
       override fun setJob(job: Job) {
-        repositoryJob?.cancel()
-        repositoryJob = job
+        addJob("getAccountProperties", job)
       }
 
 
     }.asLiveData()
-  }
-
-  fun cancelActiveJobs(){
-    Log.d(TAG, "AuthRepository: Cancelling on-going jobs...")
-    repositoryJob?.cancel()
   }
 }
