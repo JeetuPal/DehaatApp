@@ -1,6 +1,7 @@
 package com.dehaat.assignment.ui.main.blog
 
 import androidx.lifecycle.LiveData
+import com.dehaat.assignment.models.BlogPost
 import com.dehaat.assignment.repository.main.BlogRepository
 import com.dehaat.assignment.session.SessionManager
 import com.dehaat.assignment.ui.BaseViewModel
@@ -20,7 +21,12 @@ constructor(
         when(stateEvent){
 
             is BlogStateEvent.BlogSearchEvent ->{
-                return AbsentLiveData.create()
+                return sessionManager.cachedToken.value?.let { authToken ->
+                    blogRepository.searchBlogPosts(
+                        authToken,
+                        viewState.value!!.blogFields.searchQuery
+                    )
+                }?: AbsentLiveData.create()
             }
 
             is BlogStateEvent.None ->{
@@ -31,5 +37,31 @@ constructor(
 
     override fun initNewViewState(): BlogViewState {
         return BlogViewState()
+    }
+
+    fun setQuery(query: String){
+        val update = getCurrentViewStateOrNew()
+        update.blogFields.searchQuery = query
+        _viewState.value = update
+    }
+
+    fun setBlogListData(blogList: List<BlogPost>){
+        val update = getCurrentViewStateOrNew()
+        update.blogFields.blogList = blogList
+        _viewState.value = update
+    }
+
+    fun cancelActiveJobs(){
+        blogRepository.cancelActiveJobs() // cancel active jobs
+        handlePendingData() // hide progress bar
+    }
+
+    fun handlePendingData(){
+        setStateEvent(BlogStateEvent.None())
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        cancelActiveJobs()
     }
 }

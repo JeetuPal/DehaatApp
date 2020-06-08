@@ -3,6 +3,9 @@ package com.dehaat.assignment.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.dehaat.assignment.api.main.responses.BooksSearchResponse
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "blog_post")
 data class BlogPost(
@@ -11,35 +14,20 @@ data class BlogPost(
     @ColumnInfo(name = "pk")
     var pk: Int,
 
-    @ColumnInfo(name = "title")
-    var title: String,
+    @SerializedName("author_name")
+    @Expose
+    var authorName: String,
 
-    @ColumnInfo(name = "slug")
-    var slug: String,
+    @SerializedName("author_bio")
+    @Expose
+    var authorBio: String,
 
-    @ColumnInfo(name = "body")
-    var body: String,
+    @SerializedName("books")
+    @Expose
+    var books: List<BooksSearchResponse>
 
-    @ColumnInfo(name = "image")
-    var image: String,
-
-    @ColumnInfo(name = "date_updated")
-    var date_updated: Long,
-
-    @ColumnInfo(name = "username")
-    var username: String
-
-
-) {
-
+    ) {
     override fun toString(): String {
-        return "BlogPost(pk=$pk, " +
-                "title='$title', " +
-                "slug='$slug', " +
-                "image='$image', " +
-                "date_updated=$date_updated, " +
-                "username='$username')"
+        return "BlogPost(pk=$pk, books=$books, authorName='$authorName', authorBio='$authorBio')"
     }
-
-
 }

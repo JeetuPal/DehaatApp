@@ -9,7 +9,7 @@ class BlogViewState(
 
 ) {
     data class BlogFields(
-        val blogList: List<BlogPost> = ArrayList<BlogPost>(),
+        var blogList: List<BlogPost> = ArrayList<BlogPost>(),
         var searchQuery: String = ""
     )
 

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "946bd36346daf382b1d95a1d97125bfc",
+    "identityHash": "2585b8c5b77ad451c3d321ad50b6cb4f",
     "entities": [
       {
         "tableName": "auth_token",
@@ -76,7 +76,7 @@
       },
       {
         "tableName": "blog_post",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pk` INTEGER NOT NULL, `title` TEXT NOT NULL, `slug` TEXT NOT NULL, `body` TEXT NOT NULL, `image` TEXT NOT NULL, `date_updated` INTEGER NOT NULL, `username` TEXT NOT NULL, PRIMARY KEY(`pk`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pk` INTEGER NOT NULL, `authorName` TEXT NOT NULL, `authorBio` TEXT NOT NULL, `books` TEXT NOT NULL, PRIMARY KEY(`pk`))",
         "fields": [
           {
             "fieldPath": "pk",
@@ -85,38 +85,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "title",
-            "columnName": "title",
+            "fieldPath": "authorName",
+            "columnName": "authorName",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "slug",
-            "columnName": "slug",
+            "fieldPath": "authorBio",
+            "columnName": "authorBio",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "body",
-            "columnName": "body",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "image",
-            "columnName": "image",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "date_updated",
-            "columnName": "date_updated",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "username",
-            "columnName": "username",
+            "fieldPath": "books",
+            "columnName": "books",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -134,7 +116,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '946bd36346daf382b1d95a1d97125bfc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2585b8c5b77ad451c3d321ad50b6cb4f')"
     ]
   }
 }
