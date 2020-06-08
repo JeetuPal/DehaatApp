@@ -2,12 +2,14 @@ package com.dehaat.assignment.di.main
 
 import com.dehaat.assignment.api.main.OpenApiMainService
 import com.dehaat.assignment.persistence.AccountPropertiesDao
-import com.dehaat.assignment.repository.account.AccountRepository
+import com.dehaat.assignment.persistence.AppDatabase
+import com.dehaat.assignment.persistence.BlogPostDao
+import com.dehaat.assignment.repository.main.AccountRepository
+import com.dehaat.assignment.repository.main.BlogRepository
 import com.dehaat.assignment.session.SessionManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
-import java.lang.StringBuilder
 
 @Module
 class MainModule {
@@ -33,4 +35,25 @@ class MainModule {
             sessionManager
         )
     }
+
+    @MainScope
+    @Provides
+    fun provideBlogPostDao(db: AppDatabase): BlogPostDao {
+        return db.getBlogPostDao()
+    }
+
+    @MainScope
+    @Provides
+    fun provideBlogRepository(
+        openApiMainService: OpenApiMainService,
+        blogPostDao: BlogPostDao,
+        sessionManager: SessionManager
+    ) : BlogRepository{
+        return BlogRepository(
+            openApiMainService = openApiMainService,
+            blogPostDao = blogPostDao,
+            sessionManager = sessionManager
+        )
+    }
+
 }

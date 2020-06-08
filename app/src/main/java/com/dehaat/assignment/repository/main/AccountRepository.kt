@@ -1,6 +1,5 @@
-package com.dehaat.assignment.repository.account
+package com.dehaat.assignment.repository.main
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.switchMap
 import com.dehaat.assignment.api.main.OpenApiMainService

@@ -2,7 +2,7 @@ package com.dehaat.assignment.ui.main.account
 
 import androidx.lifecycle.LiveData
 import com.dehaat.assignment.models.AccountProperties
-import com.dehaat.assignment.repository.account.AccountRepository
+import com.dehaat.assignment.repository.main.AccountRepository
 import com.dehaat.assignment.session.SessionManager
 import com.dehaat.assignment.ui.BaseViewModel
 import com.dehaat.assignment.ui.DataState
