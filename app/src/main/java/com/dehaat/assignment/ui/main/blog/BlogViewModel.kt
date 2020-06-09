@@ -62,12 +62,6 @@ constructor(
         _viewState.value = update
     }
 
-    fun setIsAuthorOfBlogPost(isAuthorOfBlogPost: Boolean){
-        val update = getCurrentViewStateOrNew()
-        update.viewBlogFields.isAuthorOfBlogPost = isAuthorOfBlogPost
-        _viewState.value = update
-    }
-
     fun cancelActiveJobs(){
         blogRepository.cancelActiveJobs() // cancel active jobs
         handlePendingData() // hide progress bar

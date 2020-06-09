@@ -1,16 +1,20 @@
 package com.dehaat.assignment.ui.main.blog
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dehaat.assignment.R
 import com.dehaat.assignment.api.main.responses.BooksSearchResponse
+import com.dehaat.assignment.util.TopSpacingItemDecoration
 import kotlinx.android.synthetic.main.fragment_view_blog.*
 
-class ViewBlogFragment : BaseBlogFragment(){
+class ViewBlogFragment : BaseBlogFragment(), BooksListAdapter.Interaction {
 
-
+    private lateinit var recyclerAdapter: BooksListAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,47 +32,49 @@ class ViewBlogFragment : BaseBlogFragment(){
 
     private fun initRecyclerView() {
 
+        books_recyclerview.apply {
+            layoutManager = LinearLayoutManager(this.context)
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            removeItemDecoration(topSpacingDecorator) // does nothing if not applied already
+            addItemDecoration(topSpacingDecorator)
+
+            recyclerAdapter = BooksListAdapter(requestManager, this@ViewBlogFragment)
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastPosition = layoutManager.findLastVisibleItemPosition()
+                    if (lastPosition == recyclerAdapter.itemCount.minus(1)) {
+                        Log.d(TAG, "BlogFragment: attempting to load next page...")
+                    }
+                }
+            })
+            adapter = recyclerAdapter
+        }
     }
 
     private fun subscribeObservers() {
-        viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState->
+        viewModel.dataState.observe(viewLifecycleOwner, Observer { dataState ->
             stateChangeListener.onDataStateChange(dataState)
         })
 
-        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState->
-            viewState.viewBlogFields.booksList?.let { books->
-                setBooksList(books)
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            viewState.viewBlogFields.booksList?.let { books ->
+                if (viewState != null) {
+                    recyclerAdapter.submitList(
+                        viewState.viewBlogFields.booksList
+                    )
+                }
             }
         })
     }
 
-    private fun setBooksList(books: List<BooksSearchResponse>) {
-        blog_author.text = books[0].title
-        blog_body.text = books[0].description
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        val isAuthorOfBlogPost = true
-        if(isAuthorOfBlogPost){
-            inflater.inflate(R.menu.edit_view_menu, menu)
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // TODO("Check if user is author of blog post")
-        val isAuthorOfBlogPost = true
-        if(isAuthorOfBlogPost){
-            when(item.itemId){
-                R.id.edit -> {
-                    navUpdateBlogFragment()
-                    return true
-                }
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun navUpdateBlogFragment(){
+    private fun navUpdateBlogFragment() {
         findNavController().navigate(R.id.action_viewBlogFragment_to_updateBlogFragment)
+    }
+
+    override fun onItemSelected(position: Int, item: BooksSearchResponse) {
+        navUpdateBlogFragment()
     }
 }

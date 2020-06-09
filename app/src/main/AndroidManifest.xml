@@ -14,10 +14,12 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity android:name="com.dehaat.assignment.ui.main.MainActivity"
+                android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
                 android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
                 android:name="com.dehaat.assignment.ui.auth.AuthActivity"
+                android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
                 android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
