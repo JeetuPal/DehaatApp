@@ -1,6 +1,7 @@
 package com.dehaat.assignment.ui.main.blog
 
 import androidx.lifecycle.LiveData
+import com.dehaat.assignment.api.main.responses.BooksSearchResponse
 import com.dehaat.assignment.models.BlogPost
 import com.dehaat.assignment.repository.main.BlogRepository
 import com.dehaat.assignment.session.SessionManager
@@ -32,6 +33,10 @@ constructor(
             is BlogStateEvent.None ->{
                 return AbsentLiveData.create()
             }
+
+            is BlogStateEvent.CheckAuthorOfBlogPost-> {
+                return AbsentLiveData.create()
+            }
         }
     }
 
@@ -48,6 +53,18 @@ constructor(
     fun setBlogListData(blogList: List<BlogPost>){
         val update = getCurrentViewStateOrNew()
         update.blogFields.blogList = blogList
+        _viewState.value = update
+    }
+
+    fun setBooksList(booksList: List<BooksSearchResponse>){
+        val update = getCurrentViewStateOrNew()
+        update.viewBlogFields.booksList = booksList
+        _viewState.value = update
+    }
+
+    fun setIsAuthorOfBlogPost(isAuthorOfBlogPost: Boolean){
+        val update = getCurrentViewStateOrNew()
+        update.viewBlogFields.isAuthorOfBlogPost = isAuthorOfBlogPost
         _viewState.value = update
     }
 

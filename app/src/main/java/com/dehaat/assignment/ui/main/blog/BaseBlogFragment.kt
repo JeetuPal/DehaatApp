@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.bumptech.glide.RequestManager
 import com.dehaat.assignment.R
 import com.dehaat.assignment.models.BlogPost
 import com.dehaat.assignment.ui.DataStateChangeListener
@@ -20,6 +21,9 @@ import javax.inject.Inject
 abstract class BaseBlogFragment : DaggerFragment() {
 
     val TAG: String = "AppDebug"
+
+    @Inject
+    lateinit var requestManager: RequestManager
 
     lateinit var stateChangeListener: DataStateChangeListener
 

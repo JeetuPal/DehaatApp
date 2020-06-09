@@ -117,6 +117,10 @@ class BlogListAdapter(
         return differ.currentList.get(position).pk // -1
     }
 
+    fun findBlogPost(position: Int): BlogPost{
+        return differ.currentList[position]
+    }
+
     fun submitList(list: List<BlogPost>?, isQueryExhausted: Boolean) {
         val newList= list?.toMutableList()
         if (isQueryExhausted){
